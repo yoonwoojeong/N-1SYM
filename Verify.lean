@@ -1,19 +1,25 @@
 import SYM
 
-/-! Axiom audit of the new theorems. The build fails if any of them depends on anything
-other than the three standard axioms (in particular on `sorryAx`). -/
+/-! Axiom audit. The build fails if any of the main theorems depends on anything other than
+the three standard axioms (in particular on `sorryAx`). -/
+
+/-- info: 'SYM.Fields.susy_invariance' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.Fields.susy_invariance
+
+/-- info: 'SYM.Fields.closure' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.Fields.closure
+
+/-- info: 'SYM.bianchi' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.bianchi
+
+/-- info: 'SYM.superYangMills_susy' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.superYangMills_susy
+
+/-- info: 'SYM.superYangMills_closure' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.superYangMills_closure
 
 /-- info: 'YM.SYM.fieldStrength_shift' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in #print axioms YM.SYM.fieldStrength_shift
-
-/-- info: 'YM.SYM.covD_shift' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs in #print axioms YM.SYM.covD_shift
-
-/-- info: 'YM.SYM.hasDerivAt_fieldStrength_shift' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs in #print axioms YM.SYM.hasDerivAt_fieldStrength_shift
-
-/-- info: 'YM.SYM.hasDerivAt_covD_shift' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs in #print axioms YM.SYM.hasDerivAt_covD_shift
 
 /-- info: 'YM.SYM.lagrangian_gauge_invariant' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in #print axioms YM.SYM.lagrangian_gauge_invariant

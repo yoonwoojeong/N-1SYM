@@ -425,4 +425,22 @@ theorem bianchi (μ ρ σ : Fin 4) :
   simp only [covE, fieldStrength, map_add, map_sub, dE_brk]
   linear_combination (norm := abel) j + e1 + e2 + e3 + c1 + c2 + c3
 
+/-! ## Exact expansions
+
+These justify the first variations used later: `dF` and `dDlam` are the parts linear in the
+variation `a`, `χ`. -/
+
+/-- `F(A + a) = F(A) + (D_μ a_ν - D_ν a_μ) + [a_μ, a_ν]`. -/
+theorem fieldStrength_add (a : Fin 4 → I → R) (μ ν : Fin 4) :
+    fieldStrength c (fun μ => A μ + a μ) μ ν =
+      fieldStrength c A μ ν + (covE c A μ (a ν) - covE c A ν (a μ)) + brk c (a μ) (a ν) := by
+  simp only [fieldStrength, covE, map_add, LinearMap.add_apply]
+  rw [brk_antisymm c (a μ) (A ν)]; abel
+
+/-- `D^{A + a}_μ (ψ + χ) = D_μ ψ + (D_μ χ + [a_μ, ψ]) + [a_μ, χ]`. -/
+theorem covO_add_gauge (a : Fin 4 → I → R) (μ : Fin 4) (ψ χ : I → M) :
+    covO c (fun μ => A μ + a μ) μ (ψ + χ) =
+      covO c A μ ψ + (covO c A μ χ + act c (a μ) ψ) + act c (a μ) χ := by
+  simp only [covO, map_add, LinearMap.add_apply]; abel
+
 end SYM

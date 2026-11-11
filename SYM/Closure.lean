@@ -393,5 +393,55 @@ theorem closure_lam (h₁ : ∀ μ α, dM μ (ε₁ α) = 0) (h₂ : ∀ μ α, 
   rw [e, tri_diag]
   rfl
 
+/-! ## The commutator is a translation plus a gauge transformation -/
+
+/-- The infinitesimal translation of a configuration along `ξ`. -/
+def translation (ξ : Fin 4 → R) : Fields R M I where
+  A μ := ∑ σ, ξ σ • dE (M := M) σ (Φ.A μ)
+  lam α := ∑ σ, ξ σ • dO σ (Φ.lam α)
+  D := ∑ σ, ξ σ • dE (M := M) σ Φ.D
+
+/-- The infinitesimal gauge transformation with parameter `ω`:
+`δA_μ = -D_μ ω`, `δλ = [ω, λ]`, `δD = [ω, D]`. -/
+def gaugeVar (ω : I → R) : Fields R M I where
+  A μ := -covE c Φ.A μ ω
+  lam α := act c ω (Φ.lam α)
+  D := brk c ω Φ.D
+
+theorem dR_xi (h₁ : ∀ μ α, dM μ (ε₁ α) = 0) (h₂ : ∀ μ α, dM μ (ε₂ α) = 0) (μ σ : Fin 4) :
+    dRM μ (xi ε₁ ε₂ σ) = 0 := by
+  simp only [xi, sbil, map_zsmul, map_sum, dR_pair, h₁, h₂, map_zero, LinearMap.zero_apply,
+    add_zero, smul_zero, sum_const_zero]
+
+/-- **Off-shell closure of the `N = 1` supersymmetry algebra.** On every field of the vector
+multiplet, `δ₁ δ₂ - δ₂ δ₁` is the translation along `ξ^σ = 8 ε̄₂ γ^σ ε₁` plus the gauge
+transformation with parameter `ξ^σ A_σ`. No equation of motion is used. -/
+theorem closure (h₁ : ∀ μ α, dM μ (ε₁ α) = 0) (h₂ : ∀ μ α, dM μ (ε₂ α) = 0) :
+    (∀ μ, (Φ.dsusy c (Φ.susy c ε₁) ε₂).A μ - (Φ.dsusy c (Φ.susy c ε₂) ε₁).A μ =
+        (Φ.translation (xi ε₁ ε₂)).A μ + (Φ.gaugeVar c (∑ σ, xi ε₁ ε₂ σ • Φ.A σ)).A μ) ∧
+    (∀ α, (Φ.dsusy c (Φ.susy c ε₁) ε₂).lam α - (Φ.dsusy c (Φ.susy c ε₂) ε₁).lam α =
+        (Φ.translation (xi ε₁ ε₂)).lam α + (Φ.gaugeVar c (∑ σ, xi ε₁ ε₂ σ • Φ.A σ)).lam α) ∧
+    (Φ.dsusy c (Φ.susy c ε₁) ε₂).D - (Φ.dsusy c (Φ.susy c ε₂) ε₁).D =
+        (Φ.translation (xi ε₁ ε₂)).D + (Φ.gaugeVar c (∑ σ, xi ε₁ ε₂ σ • Φ.A σ)).D := by
+  have hξ := dR_xi ε₁ ε₂ h₁ h₂
+  refine ⟨fun μ => ?_, fun α => ?_, ?_⟩
+  · rw [closure_A]
+    simp only [translation, gaugeVar, covE_sum, covE_smul c Φ.A μ (hξ μ _), ← sum_neg_distrib,
+      ← sum_add_distrib]
+    refine sum_congr rfl fun σ _ => ?_
+    simp only [F, fieldStrength, covE, brk_antisymm c (Φ.A σ) (Φ.A μ), smul_add, smul_sub,
+      smul_neg]
+    abel
+  · rw [closure_lam c Φ ε₁ ε₂ h₁ h₂]
+    simp only [translation, gaugeVar, map_sum, map_smul, LinearMap.sum_apply,
+      LinearMap.smul_apply, ← sum_add_distrib]
+    refine sum_congr rfl fun σ _ => ?_
+    simp only [Dlam, covO, smul_add]
+  · rw [closure_D c Φ ε₁ ε₂ h₁ h₂]
+    simp only [translation, gaugeVar, map_sum, map_smul, LinearMap.sum_apply,
+      LinearMap.smul_apply, ← sum_add_distrib]
+    refine sum_congr rfl fun σ _ => ?_
+    simp only [covE, smul_add]
+
 end Fields
 end SYM

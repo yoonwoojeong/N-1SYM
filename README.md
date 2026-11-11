@@ -1,58 +1,72 @@
-# N = 1 SYM: a first step on top of the OpenAI Yang–Mills formalization
+# Classical N = 1 super Yang–Mills theory in Lean 4
 
-A small, verified Lean 4 extension of
-[yang-mills-group/OpenAI-YM-20261028](https://github.com/yang-mills-group/OpenAI-YM-20261028)
-toward classical four-dimensional `N = 1` super Yang–Mills theory.
+A formalization of classical four-dimensional `N = 1` super Yang–Mills theory, built on the
+[OpenAI Yang–Mills formalization](https://github.com/yang-mills-group/OpenAI-YM-20261028).
+
+The two central theorems are proved, with no `sorry` and no new axioms:
+
+- **Supersymmetry of the action.** The supersymmetry variation of the Lagrangian is a total
+  derivative (`SYM.Fields.susy_invariance`).
+- **Off-shell closure of the algebra.** On each of `A_μ`, `λ`, `D`, the commutator of two
+  supersymmetry transformations is a translation plus a gauge transformation, without using
+  the equations of motion (`SYM.Fields.closure`).
+
+Both are also stated for smooth Grassmann-valued fields on spacetime with an arbitrary gauge
+group of the upstream project (`SYM.superYangMills_susy`, `SYM.superYangMills_closure`).
 
 The original project is not copied or modified. It is a Lake dependency pinned to commit
-`3456e5e75cf8d4cd558955a5c7638fba2d68f464`; twelve of its modules are imported as they are.
+`3456e5e75cf8d4cd558955a5c7638fba2d68f464`.
 
-## What is here
+## The theory
 
-[`SYM/VectorMultiplet.lean`](SYM/VectorMultiplet.lean) defines the off-shell vector multiplet
-and proves that it is locally gauge covariant.
+Signature `(+,+,+,−)` with time last, real Majorana spinors, `λ̄ = λᵀ C`. Fields: a gauge
+potential `A_μ`, a Grassmann-odd Majorana gaugino `λ`, an auxiliary field `D`, all valued in
+the Lie algebra.
 
-| New definition | Meaning |
+| | In this repository | Textbook form |
+| --- | --- | --- |
+| Lagrangian | `−F_μν F^μν − 2 λ̄ γ^μ D_μ λ + 2 D²` | `4 · (−¼ F² − ½ λ̄ γ^μ D_μ λ + ½ D²)` |
+| `δA_μ` | `−2 ε̄ γ_μ λ` | `−½ ε̄' γ_μ λ` |
+| `δλ` | `(γ^{ρσ} F_ρσ + 2 γ5 D) ε` | `(¼ γ^{ρσ} F_ρσ + ½ γ5 D) ε'` |
+| `δD` | `2 ε̄ γ5 γ^μ D_μ λ` | `½ ε̄' γ5 γ^μ D_μ λ` |
+| `[δ₁, δ₂]` | `ξ^σ ∂_σ + δ_gauge(ξ^σ A_σ)`, `ξ^σ = 8 ε̄₂ γ^σ ε₁` | `ξ^σ = ½ ε̄'₂ γ^σ ε'₁` |
+
+The two columns agree for `ε' = 4 ε`. The rescaling keeps every coefficient an integer, so
+no division is needed in the proofs. `γ5 = γ^0 γ^1 γ^2 γ^3` is real with `γ5² = −1`; it is
+`i γ_*` in complex conventions.
+
+## The framework
+
+| Module | Content |
 | --- | --- |
-| `VectorMultiplet G` | gauge potential `A_μ`, four-component gaugino `λ_α`, auxiliary field `D`, all valued in `G.Color` |
-| `covD` | `D_μ φ = ∂_μ φ + [A_μ, φ]` |
-| `fieldStrength` | `F_μν = ∂_μ A_ν − ∂_ν A_μ + [A_μ, A_ν]` |
-| `shiftGauge`, `shiftAdjoint`, `VectorMultiplet.shift` | the fields moved by `t` times `δA_μ = −D_μ ω`, `δλ = [ω, λ]`, `δD = [ω, D]` |
-| `lagrangian Γ` | `¼ ⟪F_μν, F_μν⟫ + ½ Γ^μ_αβ ⟪λ_α, D_μ λ_β⟫ + ½ ⟪D, D⟫` |
+| [`SYM/Gamma.lean`](SYM/Gamma.lean) | Real Majorana gamma matrices as integer matrices. Clifford relation, symmetry of `C Γ`, and three Fierz identities, all by kernel evaluation. |
+| [`SYM/Calculus.lean`](SYM/Calculus.lean) | `SuperCalculus R M`: a supercommutative differential algebra with even part `R`, odd part `M`, and four commuting derivations. |
+| [`SYM/Color.lean`](SYM/Color.lean) | Adjoint-valued even and odd fields, structure constants, Jacobi identity, invariant inner product, covariant derivatives, field strength, **Bianchi identity**. |
+| [`SYM/Spinor.lean`](SYM/Spinor.lean) | Spinor bilinears `ū M v` and their sign rules. |
+| [`SYM/Theory.lean`](SYM/Theory.lean) | Fields, Lagrangian, first variation, supersymmetry transformation, conserved-current candidate, `susy_invariance`. |
+| [`SYM/Closure.lean`](SYM/Closure.lean) | `closure_A`, `closure_lam`, `closure_D`, and `closure`. |
+| [`SYM/GaugeGroup.lean`](SYM/GaugeGroup.lean) | Structure constants of an upstream gauge group `G : YM.Gauge`, from `G.ad`. |
+| [`SYM/Model.lean`](SYM/Model.lean) | Smooth fields on `YM.E4` with values in a Grassmann algebra form a `SuperCalculus`; the theory for gauge group `G`. |
+| [`SYM/VectorMultiplet.lean`](SYM/VectorMultiplet.lean) | The earlier, conservative step: real-valued fields and infinitesimal local gauge invariance. |
 
-| Theorem | Statement |
-| --- | --- |
-| `fieldStrength_shift` | `F(A + t δA) = F + t [ω, F] + t² [D_μ ω, D_ν ω]`, for `A` differentiable and `ω` of class `C²` at the point |
-| `covD_shift` | `D^{A + t δA}(φ + t δφ) = Dφ + t [ω, Dφ] − t² [D_μ ω, [ω, φ]]` |
-| `hasDerivAt_fieldStrength_shift`, `hasDerivAt_covD_shift` | the first-order forms `δF = [ω, F]`, `δ(Dφ) = [ω, Dφ]` |
-| `lagrangian_gauge_invariant` | `d/dt` of the Lagrangian density along `Φ + t δ_ω Φ` vanishes at `t = 0` |
-| `ad_antisymm`, `grad_ad`, `grad_covD`, `fieldStrength_antisymm` | supporting lemmas |
+Parity is carried by types. Even fields live in a commutative ring `R`, odd fields in an
+`R`-module `M`, and the product of two odd fields is a map `M → M → R` that is alternating
+and associative. Every sign rule is then a theorem instead of a side condition.
 
-No `sorry`, no new axioms. [`Verify.lean`](Verify.lean) makes the build fail if any of the
-five main theorems depends on anything beyond `propext`, `Classical.choice` and `Quot.sound`.
+Variations are defined by explicit linearization: `dF`, `dDlam`, `dLagrangian`, `dsusy`.
+`fieldStrength_add` and `covO_add_gauge` show that `dF` and `dDlam` are the linear parts of
+exact expansions; `dLagrangian` and `dsusy` are the Leibniz rule applied to them.
 
 ## What is reused from the original project
 
-| Module | Used for |
+| Upstream | Used for |
 | --- | --- |
-| `YM.Gauge.MatrixGroup`, `YM.Gauge.Lie` | `Gauge`, its Lie algebra `G.lie`, closure under the bracket |
-| `YM.Gauge.Colors` | `G.Color`, `G.colorMat`, the bracket `G.ad`, `colorMat_ad`, `colorMat_injective` |
-| `YM.Gauge.Casimir` | `ad_jacobi` (Jacobi identity), `ad_skew` (invariance of the colour inner product) |
-| `YM.Space.*` | `E4`, `Axis`, `basis` |
-| `YM.Maxwell.Exterior`, `YM.Analysis.SmoothJets` | `grad`, `grad_smooth`, `grad_comm` (symmetry of second derivatives) |
+| `YM.Gauge`, `G.lie`, `G.Color`, `G.ad`, `colorMat_ad`, `colorMat_injective` | the gauge group and its Lie algebra in trace-orthonormal coordinates |
+| `ad_jacobi`, `ad_skew` (`YM.Gauge.Casimir`) | Jacobi identity and total antisymmetry of the structure constants |
+| `YM.E4`, `YM.Axis`, `YM.basis`, `YM.timeAxis` convention | spacetime; time is the last coordinate |
+| `YM.Maxwell.grad`, `grad_smooth`, `grad_comm` | coordinate derivatives and their symmetry |
 
-## Scope, stated plainly
-
-These are gauge-covariance theorems, not supersymmetry theorems. The gaugino kinetic term
-carries an arbitrary coefficient tensor `Γ`, and the invariance theorem holds for every `Γ`,
-so it uses neither a Clifford relation nor Grassmann parity. No supersymmetry transformation
-is defined.
-
-The original project has no spinors, gamma matrices, Grassmann-odd fields or continuum
-non-abelian curvature; its continuum classical layer is abelian (Maxwell). Those are what a
-supersymmetry identity needs, and they are not built here.
-
-## Build
+## Verification
 
 Requires Git and Lean 4.32.0 (or elan).
 
@@ -61,28 +75,26 @@ lake exe cache get
 lake build
 ```
 
-`lake build` compiles the twelve reused upstream modules from source, then `SYM` and `Verify`.
+`lake build` compiles the twelve reused upstream modules from source, then this project.
+[`Verify.lean`](Verify.lean) makes the build fail if a main theorem depends on anything
+beyond `propext`, `Classical.choice` and `Quot.sound`.
 
-## What remains for a complete classical N = 1 SYM formalization
+The original project's own full verification (about 9,500 modules and `VerifyJoint.lean`) is
+not re-run here. Its sources are untouched and match its `SOURCES.sha256`.
 
-1. **Spinor algebra.** A real (Majorana) representation of the four-dimensional Clifford
-   algebra, the charge-conjugation matrix, `γ⁵`, `γ^{μν}`, and the symmetry properties of
-   the bilinears. This fixes `Γ`.
-2. **Signature.** `E4` is Euclidean, where Majorana spinors do not exist. Either a Minkowski
-   version of `grad`/`covD`/`fieldStrength`, or the Euclidean theory with doubled spinors.
-3. **Grassmann-odd fields.** The gaugino and the supersymmetry parameter must anticommute;
-   with commuting components the gaugino kinetic term is a total derivative and the
-   supersymmetry commutator vanishes identically.
-4. **Supersymmetry transformations.** `δA_μ = ε̄ γ_μ λ`, `δλ = (½ γ^{μν} F_μν + i γ⁵ D) ε`,
-   `δD = i ε̄ γ⁵ γ^μ D_μ λ`, and their gauge covariance (which follows from the theorems here).
-5. **Fierz identity.** The cubic gaugino term in `δL` cancels only by the four-dimensional
-   Fierz identity together with total antisymmetry of the structure constants.
-6. **Invariance of the action.** `δL` is a total derivative, which needs the Bianchi identity
-   for `fieldStrength` and a notion of total derivative or integration by parts.
-7. **Closure of the algebra.** `[δ₁, δ₂]` is a translation plus a field-dependent gauge
-   transformation, off shell.
-8. **Finite gauge transformations.** Covariance under `A ↦ u A u⁻¹ − (du) u⁻¹` for a
-   group-valued `u`, using the existing `G.adjoint`.
+## Limits
+
+- **First variations are defined, not derived.** `dLagrangian` and `dsusy` are written out by
+  the Leibniz rule. The expansions of `F` and `D_μ λ` are proved exact; the corresponding
+  statement for the whole Lagrangian is not.
+- **Minkowski signature is on the indices only.** The underlying space is the upstream
+  `E4 = ℝ⁴`; nothing here uses its Euclidean norm beyond differentiation.
+- **Only a one-generator Grassmann algebra is constructed** (`GrassmannAlgebra.oneGenerator`).
+  It shows the hypotheses are consistent, but all fermion bilinears vanish in it. Exterior
+  algebras on more generators satisfy the same axioms; that instance is not built.
+- **Not included:** equations of motion and the first-variation formula, conservation of the
+  supercurrent, finite gauge transformations, gauge covariance of the supersymmetry
+  transformations in the new framework, superspace, matter multiplets.
 
 ## License
 
