@@ -38,3 +38,18 @@ the three standard axioms (in particular on `sorryAx`). -/
 
 /-- info: 'SYM.FourGenerators.quartic_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in #print axioms SYM.FourGenerators.quartic_ne_zero
+
+/-- info: 'SYM.IsFirstVariation.unique' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs in #print axioms SYM.IsFirstVariation.unique
+
+/-- info: 'SYM.Fields.isFirstVariation_lagrangian' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.Fields.isFirstVariation_lagrangian
+
+/-- info: 'SYM.Fields.susy_invariance_derived' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.Fields.susy_invariance_derived
+
+/-- info: 'SYM.Fields.isFirstVariation_susy_lam' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.Fields.isFirstVariation_susy_lam
+
+/-- info: 'SYM.Fields.isFirstVariation_susy_D' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.Fields.isFirstVariation_susy_D

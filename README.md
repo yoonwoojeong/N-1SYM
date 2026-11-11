@@ -45,6 +45,7 @@ no division is needed in the proofs. `γ5 = γ^0 γ^1 γ^2 γ^3` is real with `�
 | [`SYM/Spinor.lean`](SYM/Spinor.lean) | Spinor bilinears `ū M v` and their sign rules. |
 | [`SYM/Theory.lean`](SYM/Theory.lean) | Fields, Lagrangian, first variation, supersymmetry transformation, conserved-current candidate, `susy_invariance`. |
 | [`SYM/Closure.lean`](SYM/Closure.lean) | `closure_A`, `closure_lam`, `closure_D`, and `closure`. |
+| [`SYM/Variation.lean`](SYM/Variation.lean) | The first variation as the linear coefficient of an exact expansion along `Φ + tΨ`; its uniqueness; proof that `dLagrangian` and `dsusy` are the first variations. |
 | [`SYM/GaugeGroup.lean`](SYM/GaugeGroup.lean) | Structure constants of an upstream gauge group `G : YM.Gauge`, from `G.ad`. |
 | [`SYM/Model.lean`](SYM/Model.lean) | Smooth fields on `YM.E4` with values in a Grassmann algebra form a `SuperCalculus`; the theory for gauge group `G`. |
 | [`SYM/Exterior.lean`](SYM/Exterior.lean) | The exterior algebra `Λ(ℝ²)` as a Grassmann algebra, with `θ₁θ₂ ≠ 0`. |
@@ -55,9 +56,13 @@ Parity is carried by types. Even fields live in a commutative ring `R`, odd fiel
 `R`-module `M`, and the product of two odd fields is a map `M → M → R` that is alternating
 and associative. Every sign rule is then a theorem instead of a side condition.
 
-Variations are defined by explicit linearization: `dF`, `dDlam`, `dLagrangian`, `dsusy`.
-`fieldStrength_add` and `covO_add_gauge` show that `dF` and `dDlam` are the linear parts of
-exact expansions; `dLagrangian` and `dsusy` are the Leibniz rule applied to them.
+The first variation is derived, not postulated. `IsFirstVariation f v` says `v` is the
+coefficient of `t` in an exact expansion `f t = f 0 + t v + t² r₂ + t³ r₃ + t⁴ r₄` over
+integer `t`, and `IsFirstVariation.unique` shows this coefficient is unique when there is no
+2- or 3-torsion. `lagrangian_shift` expands the Lagrangian along `Φ + tΨ` to all four orders,
+which gives `isFirstVariation_lagrangian`; `susy_shift_A`, `susy_shift_lam`, `susy_shift_D`
+do the same for the supersymmetry transformation. `susy_invariance_derived` restates the
+first main theorem in this form.
 
 ## What is reused from the original project
 
@@ -86,9 +91,10 @@ not re-run here. Its sources are untouched and match its `SOURCES.sha256`.
 
 ## Limits
 
-- **First variations are defined, not derived.** `dLagrangian` and `dsusy` are written out by
-  the Leibniz rule. The expansions of `F` and `D_μ λ` are proved exact; the corresponding
-  statement for the whole Lagrangian is not.
+- **Variations are taken along straight lines with integer parameter.** `Φ + tΨ` for
+  `t : ℤ`, which fits the algebraic setting; no derivative in a real parameter is used.
+  Uniqueness of the first variation of the gaugino component needs the odd fields to have no
+  2- or 3-torsion, which the calculus axioms assume only for even fields.
 - **Minkowski signature is on the indices only.** The underlying space is the upstream
   `E4 = ℝ⁴`; nothing here uses its Euclidean norm beyond differentiation.
 - **Grassmann algebras are built up to four generators.** `SYM.adjoin` adds one generator to
