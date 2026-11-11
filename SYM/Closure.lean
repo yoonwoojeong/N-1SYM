@@ -269,4 +269,129 @@ theorem closure_D (h₁ : ∀ μ α, dM μ (ε₁ α) = 0) (h₂ : ∀ μ α, dM
   norm_num
 
 end Fields
+/-! ## Gaugino -/
+
+/-- A product `ε₂ ε₁ ψ` of three odd spinors contracted with a coefficient tensor. -/
+def tri (ε₂ ε₁ : Fin 4 → M) (ψ : Fin 4 → I → M) (w : Fin 4 → Fin 4 → Fin 4 → ℤ) : I → M :=
+  ∑ β, ∑ γ', ∑ δ, w β γ' δ • (pair (ε₂ β) (ε₁ γ') • ψ δ)
+
+section tri
+variable (ε₂ ε₁ : Fin 4 → M) (ψ : Fin 4 → I → M) (w w' : Fin 4 → Fin 4 → Fin 4 → ℤ)
+
+theorem tri_add : tri ε₂ ε₁ ψ (fun β γ' δ => w β γ' δ + w' β γ' δ) =
+    tri ε₂ ε₁ ψ w + tri ε₂ ε₁ ψ w' := by
+  simp only [tri, add_smul, sum_add_distrib]
+
+theorem tri_zsmul (n : ℤ) : tri ε₂ ε₁ ψ (fun β γ' δ => n * w β γ' δ) = n • tri ε₂ ε₁ ψ w := by
+  simp only [tri, mul_smul, smul_sum]
+
+theorem tri_sum (v : Fin 4 → Fin 4 → Fin 4 → Fin 4 → ℤ) :
+    tri ε₂ ε₁ ψ (fun β γ' δ => ∑ σ, v σ β γ' δ) = ∑ σ, tri ε₂ ε₁ ψ (v σ) := by
+  simp only [tri, sum_smul]
+  exact (sum_congr rfl fun β _ =>
+    (sum_congr rfl fun γ' _ => sum_comm).trans sum_comm).trans sum_comm
+
+/-- Exchanging the two parameters. -/
+theorem tri_swap : tri ε₁ ε₂ ψ w = -tri ε₂ ε₁ ψ (fun β γ' δ => w γ' β δ) := by
+  simp only [tri]
+  rw [sum_comm, ← sum_neg_distrib]
+  refine sum_congr rfl fun β _ => ?_
+  rw [← sum_neg_distrib]
+  refine sum_congr rfl fun γ' _ => ?_
+  rw [← sum_neg_distrib]
+  refine sum_congr rfl fun δ _ => ?_
+  rw [pair_antisymm (ε₁ γ') (ε₂ β), neg_smul, smul_neg]
+
+theorem tri_diag (N : Mat4) (α : Fin 4) :
+    tri ε₂ ε₁ ψ (fun β γ' δ => 8 * (N β γ' * if α = δ then 1 else 0)) =
+      ((8 : ℤ) • sbil pairRM N ε₂ ε₁) • ψ α := by
+  simp only [tri, sbil, mul_ite, mul_one, mul_zero, ite_smul, zero_smul, sum_ite_eq, mem_univ,
+    if_true, smul_sum, sum_smul, smul_assoc, mul_smul]
+
+/-- The matrix `P` applied to the spinor `X ε`, as an additive function of `X`. -/
+def mvms (P : Mat4) (ε : Fin 4 → M) (α : Fin 4) : (I → R) →+ (I → M) where
+  toFun X := mv P (fun β => ms X (ε β)) α
+  map_zero' := by simp [mv]
+  map_add' X Y := by simp [mv, smul_add, sum_add_distrib]
+
+theorem mvms_sbil (P N : Mat4) (α : Fin 4) :
+    mvms P ε₂ α (sbil sm N ε₁ ψ : I → R) = tri ε₂ ε₁ ψ (fun β γ' δ => P α β * N γ' δ) := by
+  simp only [mvms, AddMonoidHom.coe_mk, ZeroHom.coe_mk, mv, sbil, tri, map_sum, map_zsmul,
+    ms_sm, smul_sum, smul_smul]
+  refine (sum_rot' _).trans ?_
+  refine sum_congr rfl fun β _ => sum_congr rfl fun γ' _ => sum_congr rfl fun δ _ => ?_
+  rw [mul_comm]
+
+end tri
+
+namespace Fields
+variable (Φ : Fields R M I) (ε₁ ε₂ : Fin 4 → M)
+
+/-- `δ₁ (δ₂ λ)` as a contraction of `ε₂ ε₁ D_ρ λ`. -/
+theorem dsusy_lam (h₁ : ∀ μ α, dM μ (ε₁ α) = 0) (α : Fin 4) :
+    (Φ.dsusy c (Φ.susy c ε₁) ε₂).lam α =
+      ∑ ρ, tri ε₂ ε₁ (Φ.Dlam c ρ) (closureW ρ α) := by
+  have hl : (Φ.dsusy c (Φ.susy c ε₁) ε₂).lam α =
+      ∑ ρ, ∑ σ, mvms (γ2 ρ σ) ε₂ α (Φ.dF c (Φ.susy c ε₁).A ρ σ)
+        + (2 : ℤ) • mvms γ5 ε₂ α (Φ.susy c ε₁).D := rfl
+  have hD : (Φ.susy c ε₁).D =
+      (2 : ℤ) • ∑ μ, sbil sm (chargeC * γ5 * γ μ) ε₁ (Φ.Dlam c μ) := rfl
+  have hW : ∀ ρ, tri ε₂ ε₁ (Φ.Dlam c ρ) (closureW ρ α) =
+      ∑ σ, (-(4 * η σ)) • tri ε₂ ε₁ (Φ.Dlam c ρ) (fun β γ' δ => γ2 ρ σ α β * Cγ σ γ' δ)
+        + (4 : ℤ) • tri ε₂ ε₁ (Φ.Dlam c ρ)
+            (fun β γ' δ => γ5 α β * (chargeC * γ5 * γ ρ) γ' δ) := by
+    intro ρ
+    have e : closureW ρ α = fun β γ' δ =>
+        (∑ σ, (-(4 * η σ)) * (γ2 ρ σ α β * Cγ σ γ' δ))
+          + 4 * (γ5 α β * (chargeC * γ5 * γ ρ) γ' δ) := by
+      funext β γ' δ
+      simp only [closureW, mul_sum]
+      congr 1
+      exact sum_congr rfl fun σ _ => by ring
+    rw [e, tri_add, tri_sum, tri_zsmul]
+    simp only [tri_zsmul]
+  have hanti : ∀ ρ σ, tri ε₂ ε₁ (Φ.Dlam c σ) (fun β γ' δ => γ2 ρ σ α β * Cγ ρ γ' δ) =
+      -tri ε₂ ε₁ (Φ.Dlam c σ) (fun β γ' δ => γ2 σ ρ α β * Cγ ρ γ' δ) := by
+    intro ρ σ
+    have e : (fun β γ' δ => γ2 ρ σ α β * Cγ ρ γ' δ) =
+        fun β γ' δ => (-1 : ℤ) * (γ2 σ ρ α β * Cγ ρ γ' δ) := by
+      funext β γ' δ; rw [γ2_antisymm σ ρ, Matrix.neg_apply]; ring
+    rw [e, tri_zsmul, neg_one_smul]
+  obtain ⟨t, ht⟩ : ∃ t : Fin 4 → Fin 4 → I → M, ∀ ρ σ, t ρ σ =
+      tri ε₂ ε₁ (Φ.Dlam c ρ) (fun β γ' δ => γ2 ρ σ α β * Cγ σ γ' δ) := ⟨_, fun _ _ => rfl⟩
+  have e : ∀ ρ σ, mvms (γ2 ρ σ) ε₂ α (Φ.dF c (Φ.susy c ε₁).A ρ σ) =
+      -((2 * η σ) • t ρ σ) - (2 * η ρ) • t σ ρ := by
+    intro ρ σ
+    rw [dF, covE_susyA c Φ ε₁ h₁, covE_susyA c Φ ε₁ h₁, map_sub, map_neg, map_neg, map_zsmul,
+      map_zsmul, mvms_sbil, mvms_sbil, hanti, ← ht, ← ht]
+    simp only [smul_neg]; abel
+  have T1 : ∑ ρ, ∑ σ, mvms (γ2 ρ σ) ε₂ α (Φ.dF c (Φ.susy c ε₁).A ρ σ) =
+      ∑ ρ, ∑ σ, (-(4 * η σ)) • t ρ σ := by
+    simp only [e, sum_sub_distrib, sum_neg_distrib]
+    rw [sum_comm (f := fun ρ σ => (2 * η ρ) • t σ ρ)]
+    simp only [← sum_neg_distrib, ← sum_sub_distrib]
+    refine sum_congr rfl fun ρ _ => sum_congr rfl fun σ _ => ?_
+    module
+  have T2 : (2 : ℤ) • mvms γ5 ε₂ α (Φ.susy c ε₁).D = ∑ ρ, (4 : ℤ) • tri ε₂ ε₁ (Φ.Dlam c ρ)
+      (fun β γ' δ => γ5 α β * (chargeC * γ5 * γ ρ) γ' δ) := by
+    rw [hD, map_zsmul, map_sum]
+    simp only [mvms_sbil, smul_sum, smul_smul]
+    norm_num
+  rw [hl, T1, T2]
+  simp only [hW, ← ht, sum_add_distrib]
+
+/-- **Closure on the gaugino:** `[δ₁, δ₂] λ = ξ^σ D_σ λ`. -/
+theorem closure_lam (h₁ : ∀ μ α, dM μ (ε₁ α) = 0) (h₂ : ∀ μ α, dM μ (ε₂ α) = 0) (α : Fin 4) :
+    (Φ.dsusy c (Φ.susy c ε₁) ε₂).lam α - (Φ.dsusy c (Φ.susy c ε₂) ε₁).lam α =
+      ∑ σ, xi ε₁ ε₂ σ • Φ.Dlam c σ α := by
+  rw [dsusy_lam c Φ ε₁ ε₂ h₁, dsusy_lam c Φ ε₂ ε₁ h₂, ← sum_sub_distrib]
+  refine sum_congr rfl fun ρ _ => ?_
+  rw [tri_swap ε₂ ε₁, sub_neg_eq_add, ← tri_add]
+  have e : (fun β γ' δ => closureW ρ α β γ' δ + closureW ρ α γ' β δ) =
+      fun β γ' δ => 8 * (Cγ ρ β γ' * if α = δ then 1 else 0) := by
+    funext β γ' δ; exact fierz_closure ρ α β γ' δ
+  rw [e, tri_diag]
+  rfl
+
+end Fields
 end SYM
