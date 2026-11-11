@@ -47,6 +47,7 @@ no division is needed in the proofs. `γ5 = γ^0 γ^1 γ^2 γ^3` is real with `�
 | [`SYM/Closure.lean`](SYM/Closure.lean) | `closure_A`, `closure_lam`, `closure_D`, and `closure`. |
 | [`SYM/GaugeGroup.lean`](SYM/GaugeGroup.lean) | Structure constants of an upstream gauge group `G : YM.Gauge`, from `G.ad`. |
 | [`SYM/Model.lean`](SYM/Model.lean) | Smooth fields on `YM.E4` with values in a Grassmann algebra form a `SuperCalculus`; the theory for gauge group `G`. |
+| [`SYM/Exterior.lean`](SYM/Exterior.lean) | The exterior algebra `Λ(ℝ²)` as a Grassmann algebra, with `θ₁θ₂ ≠ 0`. |
 | [`SYM/VectorMultiplet.lean`](SYM/VectorMultiplet.lean) | The earlier, conservative step: real-valued fields and infinitesimal local gauge invariance. |
 
 Parity is carried by types. Even fields live in a commutative ring `R`, odd fields in an
@@ -89,9 +90,10 @@ not re-run here. Its sources are untouched and match its `SOURCES.sha256`.
   statement for the whole Lagrangian is not.
 - **Minkowski signature is on the indices only.** The underlying space is the upstream
   `E4 = ℝ⁴`; nothing here uses its Euclidean norm beyond differentiation.
-- **Only a one-generator Grassmann algebra is constructed** (`GrassmannAlgebra.oneGenerator`).
-  It shows the hypotheses are consistent, but all fermion bilinears vanish in it. Exterior
-  algebras on more generators satisfy the same axioms; that instance is not built.
+- **The Grassmann algebra constructed is `Λ(ℝ²)`.** Fermion bilinears are non-zero in it
+  (`SYM.TwoGenerators.oddMul_ne_zero`), but products of three or more odd elements vanish,
+  so the cubic gaugino cancellation is not exercised by this model. The theorems hold for
+  every Grassmann algebra; an instance on more generators is not built.
 - **Not included:** equations of motion and the first-variation formula, conservation of the
   supercurrent, finite gauge transformations, gauge covariance of the supersymmetry
   transformations in the new framework, superspace, matter multiplets.
