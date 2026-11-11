@@ -29,3 +29,12 @@ the three standard axioms (in particular on `sorryAx`). -/
 
 /-- info: 'SYM.TwoGenerators.oddMul_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in #print axioms SYM.TwoGenerators.oddMul_ne_zero
+
+/-- info: 'SYM.adjoin' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.adjoin
+
+/-- info: 'SYM.FourGenerators.grassmann' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.FourGenerators.grassmann
+
+/-- info: 'SYM.FourGenerators.quartic_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.FourGenerators.quartic_ne_zero

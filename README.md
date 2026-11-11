@@ -48,6 +48,7 @@ no division is needed in the proofs. `γ5 = γ^0 γ^1 γ^2 γ^3` is real with `�
 | [`SYM/GaugeGroup.lean`](SYM/GaugeGroup.lean) | Structure constants of an upstream gauge group `G : YM.Gauge`, from `G.ad`. |
 | [`SYM/Model.lean`](SYM/Model.lean) | Smooth fields on `YM.E4` with values in a Grassmann algebra form a `SuperCalculus`; the theory for gauge group `G`. |
 | [`SYM/Exterior.lean`](SYM/Exterior.lean) | The exterior algebra `Λ(ℝ²)` as a Grassmann algebra, with `θ₁θ₂ ≠ 0`. |
+| [`SYM/Adjoin.lean`](SYM/Adjoin.lean) | Adjoining one odd generator to any Grassmann algebra gives a Grassmann algebra (`adjoin`). Applied three times: the exterior algebra on four generators, with `(θ₁θ₂)(θ₃θ₄) ≠ 0`. |
 | [`SYM/VectorMultiplet.lean`](SYM/VectorMultiplet.lean) | The earlier, conservative step: real-valued fields and infinitesimal local gauge invariance. |
 
 Parity is carried by types. Even fields live in a commutative ring `R`, odd fields in an
@@ -90,10 +91,11 @@ not re-run here. Its sources are untouched and match its `SOURCES.sha256`.
   statement for the whole Lagrangian is not.
 - **Minkowski signature is on the indices only.** The underlying space is the upstream
   `E4 = ℝ⁴`; nothing here uses its Euclidean norm beyond differentiation.
-- **The Grassmann algebra constructed is `Λ(ℝ²)`.** Fermion bilinears are non-zero in it
-  (`SYM.TwoGenerators.oddMul_ne_zero`), but products of three or more odd elements vanish,
-  so the cubic gaugino cancellation is not exercised by this model. The theorems hold for
-  every Grassmann algebra; an instance on more generators is not built.
+- **Grassmann algebras are built up to four generators.** `SYM.adjoin` adds one generator to
+  any Grassmann algebra whose odd product is norm-contractive, and
+  `SYM.FourGenerators.quartic_ne_zero` shows that quartic fermion terms are non-zero on four
+  generators. Each further generator is one more application of `adjoin`; the tower is not
+  packaged as a single family indexed by the number of generators.
 - **Not included:** equations of motion and the first-variation formula, conservation of the
   supercurrent, finite gauge transformations, gauge covariance of the supersymmetry
   transformations in the new framework, superspace, matter multiplets.
