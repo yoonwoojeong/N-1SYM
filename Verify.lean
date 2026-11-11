@@ -53,3 +53,15 @@ the three standard axioms (in particular on `sorryAx`). -/
 
 /-- info: 'SYM.Fields.isFirstVariation_susy_D' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in #print axioms SYM.Fields.isFirstVariation_susy_D
+
+/-- info: 'SYM.Fields.first_variation' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.Fields.first_variation
+
+/-- info: 'SYM.Fields.noether_identity' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.Fields.noether_identity
+
+/-- info: 'SYM.Fields.supercurrent_conserved' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.Fields.supercurrent_conserved
+
+/-- info: 'SYM.Fields.supercurrent_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM.Fields.supercurrent_eq

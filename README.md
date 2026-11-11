@@ -11,7 +11,16 @@ The two central theorems are proved, with no `sorry` and no new axioms:
   supersymmetry transformations is a translation plus a gauge transformation, without using
   the equations of motion (`SYM.Fields.closure`).
 
-Both are also stated for smooth Grassmann-valued fields on spacetime with an arbitrary gauge
+Built on them:
+
+- **Equations of motion.** `first_variation` writes the first variation of the Lagrangian as
+  the Euler–Lagrange expressions contracted with the variation, plus a divergence. The
+  expressions are `4 D_μ F^{μν} − 2 λ̄ γ^ν [·, λ]`, `−4 C γ^μ D_μ λ` and `4 D`.
+- **Supercurrent.** `noether_identity` gives the divergence of the supercurrent off shell,
+  `supercurrent_conserved` its vanishing on shell, and `supercurrent_eq` its closed form
+  `J^μ = −4 F_ρσ · ε̄ γ^{ρσ} γ^μ λ`.
+
+Both main theorems are also stated for smooth Grassmann-valued fields on spacetime with an arbitrary gauge
 group of the upstream project (`SYM.superYangMills_susy`, `SYM.superYangMills_closure`).
 
 The original project is not copied or modified. It is a Lake dependency pinned to commit
@@ -46,6 +55,7 @@ no division is needed in the proofs. `γ5 = γ^0 γ^1 γ^2 γ^3` is real with `�
 | [`SYM/Theory.lean`](SYM/Theory.lean) | Fields, Lagrangian, first variation, supersymmetry transformation, conserved-current candidate, `susy_invariance`. |
 | [`SYM/Closure.lean`](SYM/Closure.lean) | `closure_A`, `closure_lam`, `closure_D`, and `closure`. |
 | [`SYM/Variation.lean`](SYM/Variation.lean) | The first variation as the linear coefficient of an exact expansion along `Φ + tΨ`; its uniqueness; proof that `dLagrangian` and `dsusy` are the first variations. |
+| [`SYM/Noether.lean`](SYM/Noether.lean) | Equations of motion from the first-variation formula; Noether's identity; conservation and closed form of the supercurrent. |
 | [`SYM/GaugeGroup.lean`](SYM/GaugeGroup.lean) | Structure constants of an upstream gauge group `G : YM.Gauge`, from `G.ad`. |
 | [`SYM/Model.lean`](SYM/Model.lean) | Smooth fields on `YM.E4` with values in a Grassmann algebra form a `SuperCalculus`; the theory for gauge group `G`. |
 | [`SYM/Exterior.lean`](SYM/Exterior.lean) | The exterior algebra `Λ(ℝ²)` as a Grassmann algebra, with `θ₁θ₂ ≠ 0`. |
@@ -102,8 +112,10 @@ not re-run here. Its sources are untouched and match its `SOURCES.sha256`.
   `SYM.FourGenerators.quartic_ne_zero` shows that quartic fermion terms are non-zero on four
   generators. Each further generator is one more application of `adjoin`; the tower is not
   packaged as a single family indexed by the number of generators.
-- **Not included:** equations of motion and the first-variation formula, conservation of the
-  supercurrent, finite gauge transformations, gauge covariance of the supersymmetry
+- **Equations of motion are the Euler–Lagrange expressions.** They are read off from the
+  first-variation formula. The converse, that a stationary action forces them to vanish,
+  needs the fundamental lemma of the calculus of variations and is not proved.
+- **Not included:** finite gauge transformations, gauge covariance of the supersymmetry
   transformations in the new framework, superspace, matter multiplets.
 
 ## License
