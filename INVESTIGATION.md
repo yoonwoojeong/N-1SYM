@@ -3,7 +3,7 @@
 Lean is the referee. An entry is **proved** or **refuted** only if the deciding theorem is in
 this repository and passes the axiom audit in `Verify.lean`. Everything else is **open**.
 
-Status after tranche 1. Most of the programme is still open; see the last section.
+Status after tranche 2. Most of the programme is still open; see the last section.
 
 ## Conventions
 
@@ -61,22 +61,42 @@ Numerical symmetry table of `C q Γ^{(p)}` (S symmetric, A antisymmetric), `p = 
 Hypotheses of the C1 refutation: the Lagrangian is the quadratic density `⟨H, H⟩` of a
 single 2-form potential, with no other fields; `R` has no 2-torsion.
 
-## Steps 3–5
+## Step 3. Closure and supercurrent
 
-| Item | Status |
-| --- | --- |
-| Closure of the algebra and supercurrent for a survivor | open: no supersymmetric survivor yet |
-| Definition and enumeration of non-abelian deformations | open: not attempted |
-| Obstruction theorem with exact hypotheses, and its relaxations | open: not attempted |
-| 5D maximal SYM from 10D, circle reduction check | open: not attempted |
+Open: there is no supersymmetric survivor yet.
+
+## Step 4. Non-abelian
+
+A *deformation* here means: fields valued in an associative algebra with the commutator
+bracket, a modified field strength `H`, and a modified tensor gauge transformation `δ_Λ B`,
+both reducing to `dB` and `dΛ` when the bracket vanishes. Only the first one has been
+examined; deformations have not been enumerated order by order.
+
+| # | Deformation | Status | Deciding theorem |
+| --- | --- | --- | --- |
+| D1 | Minimal coupling: connection `C`, `H = D_C B`, `δ_Λ B = D_C Λ`, `δ_Λ C = 0` | **obstructed** | `covD_covD`: `2 D² = F ∧ ·`. `minimal_coupling_variation`: `2 δ_Λ H = F ∧ Λ`. The tensor gauge symmetry is broken by the curvature of `C`. |
+| D1-flat | D1 with a flat connection | **consistent** | `covD_covD_of_flat`: `D² = 0`, so `δ_Λ H = 0`. A flat connection is locally pure gauge, so this is the abelian theory in disguise. |
+| D2 | Accompanying 1-form transforming under `Λ` (`δ_Λ C ≠ 0`), with a constraint relating `F` and `B` | open | not attempted |
+| D3 | Extra fields, higher algebraic structures, non-local terms | open | not attempted |
+| — | Order-by-order enumeration of deformations | open | not attempted |
+
+Hypotheses of the D1 obstruction: values in an associative algebra with the commutator as
+bracket; the same connection in `H` and in `δ_Λ B`; `δ_Λ C = 0`; no further fields; no
+2-torsion. The obstruction says nothing about deformations outside this ansatz.
+
+## Step 5. Reduction to five dimensions
+
+Open: 5D maximal SYM has not been derived from 10D, and no reduction has been checked.
 
 ## Plain summary
 
 - **Constructed:** a dimension-independent calculus of forms; the 6D Hodge star; real
   `16 × 16` gamma matrices with their quaternionic structure; one candidate action (C2)
   whose field equation is the curl of the self-duality condition.
-- **Proved impossible:** `H ∧ *H` as an action for a self-dual 3-form, under the hypotheses
+- **Proved impossible:** `H ∧ *H` as an action for a self-dual 3-form, and minimal coupling
+  as a non-abelian deformation unless the connection is flat, each under the hypotheses
   stated above.
 - **Open:** everything involving fermions in six dimensions (the multiplet, supersymmetry,
   closure, supercurrent), Lorentz invariance of C2, the covariant and doubled-field
-  candidates, the whole non-abelian question, and the reduction to five dimensions.
+  candidates, every non-abelian deformation beyond minimal coupling, and the reduction to
+  five dimensions.

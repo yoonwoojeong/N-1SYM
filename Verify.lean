@@ -96,3 +96,12 @@ the three standard axioms (in particular on `sorryAx`). -/
 
 /-- info: 'SYM6.qI_comm' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in #print axioms SYM6.qI_comm
+
+/-- info: 'SYM6.covD_covD' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM6.covD_covD
+
+/-- info: 'SYM6.minimal_coupling_variation' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM6.minimal_coupling_variation
+
+/-- info: 'SYM6.covD_covD_of_flat' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM6.covD_covD_of_flat
