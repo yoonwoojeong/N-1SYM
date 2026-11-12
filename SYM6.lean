@@ -9,3 +9,5 @@ import SYM6.Spinor6
 import SYM6.Fierz6
 import SYM6.Color
 import SYM6.Theory
+import SYM6.Chiral3
+import SYM6.Instances

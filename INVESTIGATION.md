@@ -53,8 +53,8 @@ four-dimensional.
 | Complete list of Fierz identities | open | not attempted |
 | Bianchi identity for the non-abelian field strength, any dimension | proved | `SYM6.bianchi` |
 | Super Yang–Mills is supersymmetric given `GammaData` | proved | `SYM6.GFields.susy_invariance` |
-| `GammaData` in four dimensions | open (check running) | `SYM6.gamma4` in `SYM6/Instances.lean`, not yet in the build |
-| `GammaData` in six dimensions, chiral spinor | open (check running) | `SYM6.gamma6`; its cyclicity lemma is a long kernel evaluation still in progress |
+| `GammaData` in four dimensions | proved | `SYM6.gamma4`, `superYangMills4` |
+| `GammaData` in six dimensions, chiral spinor | proved | `SYM6.gamma6`, `superYangMills6`; cyclicity of `Γ^{ρσμ}` in `SYM6/Chiral3.lean` (about twelve minutes of kernel evaluation) |
 
 Numerical symmetry table of `C q Γ^{(p)}` (S symmetric, A antisymmetric), `p = 0…6`:
 
