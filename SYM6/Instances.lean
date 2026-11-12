@@ -1,5 +1,5 @@
 import SYM6.Theory
-import SYM6.Fierz6
+import SYM6.Chiral3
 import SYM.Gamma
 
 /-!
@@ -36,53 +36,10 @@ def gamma4 : GammaData (Fin 4) (Fin 4) where
   K_symm := SYM.Cγ_transpose
   G2K := fun ρ σ μ => by
     rw [SYM.Cγ, ← Matrix.mul_assoc, SYM.γ2_transpose_C, Matrix.neg_mul, SYM.Cγ2γ]
-    rfl
   K3_cyclic := fun ρ σ μ => by rw [SYM.γ3_cyclic]
   fierz := SYM.fierz_cubic
 
 /-! ## Six dimensions -/
-
-/-- `Γ^{ρσ}`. -/
-def Γ2 (ρ σ : Fin 6) : Mat16 := if ρ = σ then 0 else Γ ρ * Γ σ
-
-/-- The matrices of `ψ̄ Γ^{ρσμ} χ` on chiral spinors, defined through
-`Γ^{ρσ} Γ^μ = Γ^{ρσμ} + Γ^ρ η^{σμ} - Γ^σ η^{ρμ}`. -/
-def chiralΓ3 (ρ σ μ : Fin 6) : Mat16 :=
-  -((Γ2 ρ σ).transpose * chiralΓ μ) - (if σ = μ then ηg σ else 0) • chiralΓ ρ
-    + (if ρ = μ then ηg ρ else 0) • chiralΓ σ
-
-theorem ηg_sq : ∀ a : Fin 6, ηg a * ηg a = 1 := by decide
-
-theorem chiralΓ_symm : ∀ a, (chiralΓ a).transpose = chiralΓ a := by decide +kernel
-
-theorem chiralΓ3_cyclic_0 : ∀ σ μ : Fin 6, chiralΓ3 σ μ 0 = chiralΓ3 0 σ μ := by
-  decide +kernel
-
-theorem chiralΓ3_cyclic_1 : ∀ σ μ : Fin 6, chiralΓ3 σ μ 1 = chiralΓ3 1 σ μ := by
-  decide +kernel
-
-theorem chiralΓ3_cyclic_2 : ∀ σ μ : Fin 6, chiralΓ3 σ μ 2 = chiralΓ3 2 σ μ := by
-  decide +kernel
-
-theorem chiralΓ3_cyclic_3 : ∀ σ μ : Fin 6, chiralΓ3 σ μ 3 = chiralΓ3 3 σ μ := by
-  decide +kernel
-
-theorem chiralΓ3_cyclic_4 : ∀ σ μ : Fin 6, chiralΓ3 σ μ 4 = chiralΓ3 4 σ μ := by
-  decide +kernel
-
-theorem chiralΓ3_cyclic_5 : ∀ σ μ : Fin 6, chiralΓ3 σ μ 5 = chiralΓ3 5 σ μ := by
-  decide +kernel
-
-/-- Cyclic symmetry of `Γ^{ρσμ}` on chiral spinors. -/
-theorem chiralΓ3_cyclic : ∀ ρ σ μ : Fin 6, chiralΓ3 σ μ ρ = chiralΓ3 ρ σ μ := by
-  intro ρ
-  fin_cases ρ
-  · exact chiralΓ3_cyclic_0
-  · exact chiralΓ3_cyclic_1
-  · exact chiralΓ3_cyclic_2
-  · exact chiralΓ3_cyclic_3
-  · exact chiralΓ3_cyclic_4
-  · exact chiralΓ3_cyclic_5
 
 /-- Gamma data of six-dimensional chiral spinors. -/
 def gamma6 : GammaData (Fin 6) (Fin 16) where
@@ -100,7 +57,7 @@ def gamma6 : GammaData (Fin 6) (Fin 16) where
     have h := fierz6 α β γ' δ
     have hs : ∀ a (i j : Fin 16), chiralΓ a i j = chiralΓ a j i := fun a i j => by
       have := congrFun (congrFun (chiralΓ_symm a) j) i
-      simpa [Matrix.transpose_apply] using this.symm
+      simpa [Matrix.transpose_apply] using this
     rw [← h]
     refine Finset.sum_congr rfl fun a _ => ?_
     rw [hs a δ α, hs a γ' β, hs a β δ, hs a γ' α, hs a α γ']
