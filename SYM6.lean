@@ -1,0 +1,13 @@
+import SYM6.Forms
+import SYM6.Hodge
+import SYM6.NonCovariant
+import SYM6.Gamma6
+import SYM6.Bridge
+import SYM6.NonAbelian
+import SYM6.SuperCalc
+import SYM6.Spinor6
+import SYM6.Fierz6
+import SYM6.Color
+import SYM6.Theory
+import SYM6.Chiral3
+import SYM6.Instances
