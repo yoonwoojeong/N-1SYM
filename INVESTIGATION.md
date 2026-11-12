@@ -19,7 +19,6 @@ proving: `** = +1` on 3-forms.
 | `SYM.SuperCalculus R M`, index type fixed to `Fin 4`, even and odd parts | `SYM6.DiffRing ι R`: commuting derivations over any index type, even part only. `SYM6.diffRingOfSuperCalculus` shows the 4D even part is the case `ι = Fin 4`. |
 | Tensors with explicit index slots (`Fin 4 → Fin 4 → …`) and hand-written antisymmetry | Forms as functions on index sets; antisymmetry is built in, and one definition of `d` covers every degree. |
 | Real `4 × 4` Majorana matrices | Real `16 × 16` matrices: `Cl(5,1) ≅ M₄(ℍ)` has no real `8 × 8` representation. The quaternionic structure replaces the complex `8 × 8` picture. |
-
 | `SYM.SuperCalculus` with odd fields, four derivations | `SYM6.SuperCalc ι R M`: the same axioms with derivations indexed by any type. `superCalcOfSuperCalculus` shows the 4D calculus is the case `ι = Fin 4`; `SuperCalc.toDiffRing` gives the even part. |
 | `SYM.sbil`, `SYM.mv` on `Fin 4` spinor indices | `SYM6.sbilG`, `SYM6.mvG` on any finite spinor index type, with the same lemmas. |
 
