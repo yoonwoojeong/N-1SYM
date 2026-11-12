@@ -105,3 +105,18 @@ the three standard axioms (in particular on `sorryAx`). -/
 
 /-- info: 'SYM6.covD_covD_of_flat' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in #print axioms SYM6.covD_covD_of_flat
+
+/-- info: 'SYM6.fierz6' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM6.fierz6
+
+/-- info: 'SYM6.pairing20_sp4' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM6.pairing20_sp4
+
+/-- info: 'SYM6.rAct_chiral' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM6.rAct_chiral
+
+/-- info: 'SYM6.bar6_Γ_antisymm' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM6.bar6_Γ_antisymm
+
+/-- info: 'SYM6.dR_bar6' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM6.dR_bar6

@@ -3,7 +3,7 @@
 Lean is the referee. An entry is **proved** or **refuted** only if the deciding theorem is in
 this repository and passes the axiom audit in `Verify.lean`. Everything else is **open**.
 
-Status after tranche 2. Most of the programme is still open; see the last section.
+Status after tranche 3. Most of the programme is still open; see the last section.
 
 ## Conventions
 
@@ -20,8 +20,11 @@ proving: `** = +1` on 3-forms.
 | Tensors with explicit index slots (`Fin 4 → Fin 4 → …`) and hand-written antisymmetry | Forms as functions on index sets; antisymmetry is built in, and one definition of `d` covers every degree. |
 | Real `4 × 4` Majorana matrices | Real `16 × 16` matrices: `Cl(5,1) ≅ M₄(ℍ)` has no real `8 × 8` representation. The quaternionic structure replaces the complex `8 × 8` picture. |
 
-Not yet generalized: the odd part (fermions) over an arbitrary index type. The 6D spinor
-bilinear calculus (`sbil`) is not ported.
+| `SYM.SuperCalculus` with odd fields, four derivations | `SYM6.SuperCalc ι R M`: the same axioms with derivations indexed by any type. `superCalcOfSuperCalculus` shows the 4D calculus is the case `ι = Fin 4`; `SuperCalc.toDiffRing` gives the even part. |
+| `SYM.sbil`, `SYM.mv` on `Fin 4` spinor indices | `SYM6.sbilG`, `SYM6.mvG` on any finite spinor index type, with the same lemmas. |
+
+Not ported: the adjoint-valued layer (`SYM/Color.lean`) and the field-theory layer
+(`SYM/Theory.lean` onward) are still four-dimensional.
 
 ## Step 1. Foundations
 
@@ -35,8 +38,11 @@ bilinear calculus (`sbil`) is not ported.
 | Quaternionic structure commuting with the Clifford algebra (symplectic Majorana) | proved | `SYM6.qI_sq`, `qI_mul_qJ`, `qI_comm`, `qJ_comm` |
 | Bilinear symmetry, ranks 0 and 1, with and without a quaternion unit | proved | `C6_transpose`, `C6Γ_transpose`, `C6qI_transpose`, `C6qIΓ_transpose`, … |
 | Bilinear symmetry, ranks 2–6 | open (numerics only) | table below |
-| Chiral vector Fierz identity `(CΓ_a P)_{α(β}(CΓ^a P)_{γδ)} = 0` | open (numerics only) | holds numerically; the Lean proof is a 65,536-case evaluation not yet run |
-| Explicit `Sp(4)` index and the (2,0) reality condition | open | only the `Sp(1)` quaternionic structure is constructed |
+| Chiral vector Fierz identity `(CΓ_a P)_{α(β}(CΓ^a P)_{γδ)} = 0` | proved | `SYM6.fierz6` (sixteen kernel evaluations; a single one runs out of memory) |
+| Sign rules for exchanging odd spinors in `ψ̄χ`, `ψ̄Γ^aχ`, `ψ̄qχ`, `ψ̄qΓ^aχ` | proved | `bar6_one_symm`, `bar6_Γ_antisymm`, `bar6_qI_antisymm`, `bar6_qIΓ_symm` |
+| Leibniz rule for 6D bilinears | proved | `dR_bar6` |
+| (2,0) spinors as a pair of 16-component spinors; ten `Sp(4)` generators; invariant pairing; chirality preserved | proved | `sp4Gen`, `pairing20_sp4`, `rAct_chiral` |
+| The ten generators close into the Lie algebra `sp(4)` | open | commutators not computed |
 | Complete list of Fierz identities | open | not attempted |
 
 Numerical symmetry table of `C q Γ^{(p)}` (S symmetric, A antisymmetric), `p = 0…6`:
@@ -90,13 +96,14 @@ Open: 5D maximal SYM has not been derived from 10D, and no reduction has been ch
 
 ## Plain summary
 
-- **Constructed:** a dimension-independent calculus of forms; the 6D Hodge star; real
-  `16 × 16` gamma matrices with their quaternionic structure; one candidate action (C2)
+- **Constructed:** a dimension-independent calculus of forms and of odd fields; the 6D
+  Hodge star; real `16 × 16` gamma matrices with their quaternionic structure; the 6D
+  spinor bilinear calculus with the `Sp(4)` R-symmetry and the chiral Fierz identity; one candidate action (C2)
   whose field equation is the curl of the self-duality condition.
 - **Proved impossible:** `H ∧ *H` as an action for a self-dual 3-form, and minimal coupling
   as a non-abelian deformation unless the connection is flat, each under the hypotheses
   stated above.
-- **Open:** everything involving fermions in six dimensions (the multiplet, supersymmetry,
-  closure, supercurrent), Lorentz invariance of C2, the covariant and doubled-field
+- **Open:** the tensor multiplet itself (its fields, supersymmetry transformations,
+  closure, supercurrent), for which the fermion calculus is now in place, Lorentz invariance of C2, the covariant and doubled-field
   candidates, every non-abelian deformation beyond minimal coupling, and the reduction to
   five dimensions.
