@@ -1,9 +1,12 @@
 name = "n1sym"
 version = "0.1.0"
-defaultTargets = ["SYM", "Verify"]
+defaultTargets = ["SYM", "SYM6", "Verify"]
 
 [[lean_lib]]
 name = "SYM"
+
+[[lean_lib]]
+name = "SYM6"
 
 [[lean_lib]]
 name = "Verify"
