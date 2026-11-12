@@ -120,3 +120,9 @@ the three standard axioms (in particular on `sorryAx`). -/
 
 /-- info: 'SYM6.dR_bar6' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in #print axioms SYM6.dR_bar6
+
+/-- info: 'SYM6.bianchi' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM6.bianchi
+
+/-- info: 'SYM6.GFields.susy_invariance' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in #print axioms SYM6.GFields.susy_invariance

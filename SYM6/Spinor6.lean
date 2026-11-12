@@ -143,7 +143,7 @@ theorem Γ7_qK : Γ7 * qK = qK * Γ7 := by decide +kernel
 
 variable {R M : Type*} [CommRing R] [AddCommGroup M] [Module R M] [SuperCalc (Fin 6) R M]
 
-local notation "pr" => (SuperCalc.pair (Fin 6) : M →ₗ[R] M →ₗ[R] R)
+local notation "pr" => (SuperCalc.pair : M →ₗ[R] M →ₗ[R] R)
 
 /-- A six-dimensional spinor of odd fields: 16 real components. -/
 abbrev Spinor6 (M : Type*) := Fin 16 → M

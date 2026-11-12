@@ -3,7 +3,7 @@
 Lean is the referee. An entry is **proved** or **refuted** only if the deciding theorem is in
 this repository and passes the axiom audit in `Verify.lean`. Everything else is **open**.
 
-Status after tranche 3. Most of the programme is still open; see the last section.
+Status after tranche 4. Most of the programme is still open; see the last section.
 
 ## Conventions
 
@@ -22,8 +22,16 @@ proving: `** = +1` on 3-forms.
 | `SYM.SuperCalculus` with odd fields, four derivations | `SYM6.SuperCalc ι R M`: the same axioms with derivations indexed by any type. `superCalcOfSuperCalculus` shows the 4D calculus is the case `ι = Fin 4`; `SuperCalc.toDiffRing` gives the even part. |
 | `SYM.sbil`, `SYM.mv` on `Fin 4` spinor indices | `SYM6.sbilG`, `SYM6.mvG` on any finite spinor index type, with the same lemmas. |
 
-Not ported: the adjoint-valued layer (`SYM/Color.lean`) and the field-theory layer
-(`SYM/Theory.lean` onward) are still four-dimensional.
+| `SYM/Color.lean`: adjoint-valued fields over four derivations | `SYM6/Color.lean`: the same file with derivations over any index type. Statements and proofs unchanged, including the Bianchi identity. |
+| `SYM/Theory.lean`: 4D fields, Lagrangian, supersymmetry, with concrete Majorana matrices | `SYM6/Theory.lean`: the gamma matrices enter only through `GammaData` (five identities). One theorem, `GFields.susy_invariance`, for every dimension carrying such data. No auxiliary field. |
+
+To make this work the dimension became an inferred parameter of `SuperCalc` (it is determined
+by the module of odd fields), and the final index bookkeeping of the 4D proof, which expanded
+sums over `Fin 4`, was redone symbolically.
+
+Not ported: closure of the algebra, the derived first variation, and the equations of motion
+and supercurrent (`SYM/Closure.lean`, `SYM/Variation.lean`, `SYM/Noether.lean`) are still
+four-dimensional.
 
 ## Step 1. Foundations
 
@@ -43,6 +51,10 @@ Not ported: the adjoint-valued layer (`SYM/Color.lean`) and the field-theory lay
 | (2,0) spinors as a pair of 16-component spinors; ten `Sp(4)` generators; invariant pairing; chirality preserved | proved | `sp4Gen`, `pairing20_sp4`, `rAct_chiral` |
 | The ten generators close into the Lie algebra `sp(4)` | open | commutators not computed |
 | Complete list of Fierz identities | open | not attempted |
+| Bianchi identity for the non-abelian field strength, any dimension | proved | `SYM6.bianchi` |
+| Super Yang–Mills is supersymmetric given `GammaData` | proved | `SYM6.GFields.susy_invariance` |
+| `GammaData` in four dimensions | open (check running) | `SYM6.gamma4` in `SYM6/Instances.lean`, not yet in the build |
+| `GammaData` in six dimensions, chiral spinor | open (check running) | `SYM6.gamma6`; its cyclicity lemma is a long kernel evaluation still in progress |
 
 Numerical symmetry table of `C q Γ^{(p)}` (S symmetric, A antisymmetric), `p = 0…6`:
 

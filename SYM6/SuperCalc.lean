@@ -18,7 +18,7 @@ namespace SYM6
 
 /-- A supercommutative differential algebra with commuting derivations indexed by `ι`,
 presented by its even part `R` and odd part `M`. -/
-class SuperCalc (ι : Type*) (R : outParam (Type*)) (M : Type*) [CommRing R] [AddCommGroup M]
+class SuperCalc (ι : outParam (Type*)) (R : outParam (Type*)) (M : Type*) [CommRing R] [AddCommGroup M]
     [Module R M] where
   /-- Product of two odd elements. -/
   pair : M →ₗ[R] M →ₗ[R] R
@@ -39,19 +39,19 @@ namespace SuperCalc
 variable {ι R M : Type*} [CommRing R] [AddCommGroup M] [Module R M] [SuperCalc ι R M]
 
 /-- Two odd elements anticommute. -/
-theorem pair_antisymm (θ η : M) : pair ι θ η = -pair ι η θ := by
+theorem pair_antisymm (θ η : M) : pair θ η = -pair η θ := by
   have h := pair_self (ι := ι) (θ + η)
   simp only [map_add, LinearMap.add_apply, pair_self, zero_add, add_zero] at h
   exact eq_neg_of_add_eq_zero_right h
 
 /-- `(θ₁ θ₂)(θ₃ θ₄) = (θ₂ θ₃)(θ₁ θ₄)`. -/
-theorem pair_mul_pair (a b c d : M) : pair ι a b * pair ι c d = pair ι b c * pair ι a d := by
-  have h := congrArg (fun x => pair ι x d) (pair_cyclic (ι := ι) a b c)
+theorem pair_mul_pair (a b c d : M) : pair a b * pair c d = pair b c * pair a d := by
+  have h := congrArg (fun x => pair (M := M) x d) (pair_cyclic (ι := ι) a b c)
   simpa only [map_smul, LinearMap.smul_apply, smul_eq_mul] using h
 
 /-- Exchanging the second and fourth of four odd elements costs a sign. -/
 theorem pair_mul_pair_swap (a b c d : M) :
-    pair ι a b * pair ι c d = -(pair ι a d * pair ι c b) := by
+    pair a b * pair c d = -(pair a d * pair c b) := by
   rw [pair_mul_pair a b c d, pair_antisymm (ι := ι) b c]; ring
 
 /-- The even part of a Grassmann calculus is a `DiffRing`. -/
