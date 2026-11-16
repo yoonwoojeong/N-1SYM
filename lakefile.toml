@@ -1,0 +1,18 @@
+name = "n1sym"
+version = "0.1.0"
+defaultTargets = ["SYM", "SYM6", "Verify"]
+
+[[lean_lib]]
+name = "SYM"
+
+[[lean_lib]]
+name = "SYM6"
+
+[[lean_lib]]
+name = "Verify"
+
+# The original OpenAI Yang-Mills formalization, consumed unmodified at a pinned commit.
+[[require]]
+name = "ym_core"
+git = "https://github.com/yang-mills-group/OpenAI-YM-20261028"
+rev = "3456e5e75cf8d4cd558955a5c7638fba2d68f464"
